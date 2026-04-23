@@ -1,0 +1,102 @@
+{
+  "configurePresets": [
+    {
+      "name": "common",
+      "hidden": true,
+      "cacheVariables": {
+        "CMAKE_CXX_FLAGS": "$env{PROJECT_PLATFORM_FLAGS} $env{PROJECT_TEXT_FLAGS} $env{PROJECT_COMPILER_FLAGS} $penv{CXX_FLAGS}",
+        "CMAKE_MSVC_RUNTIME_LIBRARY": "MultiThreaded$<$<CONFIG:Debug>:Debug>DLL"
+      },
+      "environment": {
+        "PROJECT_ARCHITECTURE": "x64",
+        "PROJECT_PLATFORM": "windows",
+        "PROJECT_TEXT_FLAGS": "-DUNICODE -D_UNICODE"
+      },
+      "errors": {
+        "deprecated": true
+      },
+      "warnings": {
+        "deprecated": true,
+        "dev": true
+      },
+      "vendor": {
+        "microsoft.com/VisualStudioSettings/CMake/1.0": {
+          "intelliSenseMode": "$env{PROJECT_PLATFORM}-$env{PROJECT_COMPILER}-$env{PROJECT_ARCHITECTURE}",
+          "enableMicrosoftCodeAnalysis": true,
+          "enableClangTidyCodeAnalysis": true
+        }
+      }
+    },
+    {
+      "name": "buildtype-debug",
+      "hidden": true,
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Debug"
+      }
+    },
+    {
+      "name": "buildtype-release",
+      "hidden": true,
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "RelWithDebInfo"
+      }
+    },
+    {
+      "name": "packaging-vcpkg",
+      "hidden": true,
+      "toolchainFile": "$env{VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake",
+      "cacheVariables": {
+        "VCPKG_HOST_TRIPLET": "$env{PROJECT_ARCHITECTURE}-$env{PROJECT_PLATFORM}-static-md",
+        "VCPKG_TARGET_TRIPLET": "$env{PROJECT_ARCHITECTURE}-$env{PROJECT_PLATFORM}-static-md"
+      }
+    },
+    {
+      "name": "generator-ninja",
+      "hidden": true,
+      "generator": "Ninja"
+    },
+    {
+      "name": "compiler-msvc",
+      "hidden": true,
+      "environment": {
+        "PROJECT_COMPILER_FLAGS": "/EHsc /MP /W4 /WX /external:W0 /bigobj",
+        "PROJECT_COMPILER": "msvc"
+      }
+    },
+    {
+      "name": "build-debug-msvc-vcpkg",
+      "inherits": [
+        "common",
+        "buildtype-debug",
+        "packaging-vcpkg",
+        "generator-ninja",
+        "compiler-msvc"
+      ],
+      "binaryDir": "${sourceDir}/build/debug-msvc-vcpkg"
+    },
+    {
+      "name": "build-release-msvc-vcpkg",
+      "inherits": [
+        "common",
+        "buildtype-release",
+        "packaging-vcpkg",
+        "generator-ninja",
+        "compiler-msvc"
+      ],
+      "binaryDir": "${sourceDir}/build/release-msvc-vcpkg"
+    }
+  ],
+  "buildPresets": [
+    {
+      "name": "debug-msvc-vcpkg",
+      "configurePreset": "build-debug-msvc-vcpkg",
+      "displayName": "Debug (MSVC, Vcpkg)"
+    },
+    {
+      "name": "release-msvc-vcpkg",
+      "configurePreset": "build-release-msvc-vcpkg",
+      "displayName": "Release (MSVC, Vcpkg)"
+    }
+  ],
+  "version": 3
+}

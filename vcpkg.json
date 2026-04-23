@@ -1,0 +1,40 @@
+{
+  "name": "commonlibfo4",
+  "version-string": "0.0.0",
+  "builtin-baseline": "b781af668027bbf77f2f827f47b5c6cd8d825c08",
+  "dependencies": [
+    {
+      "name": "spdlog",
+      "default-features": false,
+      "features": [
+        "wchar"
+      ]
+    }
+  ],
+  "features": {
+    "ini": {
+      "description": "Enable SimpleIni-backed settings support",
+      "dependencies": [
+        "simpleini"
+      ]
+    },
+    "json": {
+      "description": "Enable glaze-backed JSON settings support",
+      "dependencies": [
+        "glaze"
+      ]
+    },
+    "toml": {
+      "description": "Enable toml11-backed TOML settings support",
+      "dependencies": [
+        "toml11"
+      ]
+    },
+    "xbyak": {
+      "description": "Enable xbyak support for REL::Trampoline",
+      "dependencies": [
+        "xbyak"
+      ]
+    }
+  }
+}
