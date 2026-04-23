@@ -4,9 +4,9 @@ struct fmt::formatter<args::ArgumentParser> : fmt::ostream_formatter
 
 namespace stl
 {
-	template <class EF>                                    //
-	requires(std::invocable<std::remove_reference_t<EF>>)  //
-		class scope_exit
+	template <class EF>                                        //
+		requires(std::invocable<std::remove_reference_t<EF>>)  //
+	class scope_exit
 	{
 	public:
 		// 1)

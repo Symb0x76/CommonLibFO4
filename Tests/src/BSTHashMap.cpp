@@ -5,9 +5,9 @@ namespace stl
 		throw std::runtime_error(std::string(a_msg));
 	}
 
-	template <class EF>                                    //
-	requires(std::invocable<std::remove_reference_t<EF>>)  //
-		class scope_exit
+	template <class EF>                                        //
+		requires(std::invocable<std::remove_reference_t<EF>>)  //
+	class scope_exit
 	{
 	public:
 		// 1)
