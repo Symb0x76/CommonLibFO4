@@ -13,7 +13,7 @@ add_project(
 		"src/pch.h"
 )
 
-find_package(Boost MODULE REQUIRED)
+find_package(Boost CONFIG REQUIRED)
 find_package(Catch2 REQUIRED CONFIG)
 
 include(Catch)
