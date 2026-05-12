@@ -373,7 +373,6 @@ set(SOURCES
 	src/RE/Fallout.cpp
 	src/RE/NetImmerse/NiAVObject.cpp
 	src/RE/NetImmerse/NiBinaryStream.cpp
-	src/RE/NetImmerse/NiLight.h
 	src/RE/NetImmerse/NiObjectNET.cpp
 	src/RE/NetImmerse/NiPoint3.cpp
 	src/RE/NetImmerse/NiRect.cpp
