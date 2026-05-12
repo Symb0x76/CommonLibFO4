@@ -258,6 +258,7 @@
 #include "RE/NetImmerse/NiFile.h"
 #include "RE/NetImmerse/NiFlags.h"
 #include "RE/NetImmerse/NiFrustum.h"
+#include "RE/NetImmerse/NiLight.h"
 #include "RE/NetImmerse/NiMatrix3.h"
 #include "RE/NetImmerse/NiMemStream.h"
 #include "RE/NetImmerse/NiNode.h"
