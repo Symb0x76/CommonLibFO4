@@ -6,8 +6,8 @@
 
 namespace RE
 {
-	#pragma warning(push)
-	#pragma warning(disable: 4324)  // structure was padded due to alignas
+#pragma warning(push)
+#pragma warning(disable: 4324)  // structure was padded due to alignas
 
 	class __declspec(novtable) NiLight :
 		public NiAVObject  // 000
@@ -17,11 +17,11 @@ namespace RE
 		NiColor amb;                     // 120
 		NiColor diff;                    // 12C
 		NiColor spec;                    // 138
-		float   dimmer;                  // 144
+		float dimmer;                    // 144
 		alignas(16) NiBound modelBound;  // 150
 		void* rendererData;              // 160
 	};
-	#pragma warning(pop)
+#pragma warning(pop)
 	static_assert(sizeof(NiLight) == 0x170);
 	static_assert(offsetof(NiLight, diff) == 0x12C);
 	static_assert(offsetof(NiLight, modelBound) == 0x150);
