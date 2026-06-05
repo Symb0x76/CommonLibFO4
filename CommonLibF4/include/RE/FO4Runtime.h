@@ -1,16 +1,12 @@
 #pragma once
 
-#ifndef NOMINMAX
-#	define NOMINMAX
-#endif
-#include <Windows.h>
-
 #include <array>
 #include <cstddef>
 #include <cstdint>
 #include <cstring>
 #include <type_traits>
 
+#include "REX/W32/KERNEL32.h"
 #include "REL/Relocation.h"
 #if defined(FALLOUT_POST_AE)
 #include "REX/FModule.h"
@@ -53,6 +49,27 @@ namespace RE::FO4Runtime
 
 	inline constexpr std::uintptr_t PRE_NG_STATIC_IMAGE_BASE = 0x140000000ull;
 
+	namespace Win32
+	{
+		using MemoryBasicInformation = REX::W32::MEMORY_BASIC_INFORMATION;
+
+		inline constexpr std::uint32_t kMemCommit = 0x00001000u;
+		inline constexpr std::uint32_t kPageNoAccess = 0x00000001u;
+		inline constexpr std::uint32_t kPageGuard = 0x00000100u;
+		inline constexpr std::uint32_t kPageReadWrite = 0x00000004u;
+		inline constexpr std::uint32_t kPageWriteCopy = 0x00000008u;
+		inline constexpr std::uint32_t kPageExecuteReadWrite = 0x00000040u;
+		inline constexpr std::uint32_t kPageExecuteWriteCopy = 0x00000080u;
+
+		[[nodiscard]] inline std::size_t VirtualQuery(
+			const void* a_address,
+			MemoryBasicInformation* a_buffer,
+			std::size_t a_length) noexcept
+		{
+			return REX::W32::VirtualQuery(a_address, a_buffer, a_length);
+		}
+	}
+
 	[[nodiscard]] inline std::uintptr_t ModuleBase()
 	{
 #if defined(FALLOUT_POST_AE)
@@ -71,43 +88,43 @@ namespace RE::FO4Runtime
 
 	[[nodiscard]] inline bool IsReadableAddress(std::uintptr_t a_address, std::size_t a_size)
 	{
-		MEMORY_BASIC_INFORMATION mbi{};
-		if (VirtualQuery(reinterpret_cast<const void*>(a_address), &mbi, sizeof(mbi)) == 0) {
+		Win32::MemoryBasicInformation mbi{};
+		if (Win32::VirtualQuery(reinterpret_cast<const void*>(a_address), &mbi, sizeof(mbi)) == 0) {
 			return false;
 		}
 
-		const auto regionBegin = reinterpret_cast<std::uintptr_t>(mbi.BaseAddress);
-		const auto regionEnd = regionBegin + mbi.RegionSize;
+		const auto regionBegin = reinterpret_cast<std::uintptr_t>(mbi.baseAddress);
+		const auto regionEnd = regionBegin + mbi.regionSize;
 		const auto readEnd = a_address + a_size;
-		if (readEnd < a_address || mbi.State != MEM_COMMIT || a_address < regionBegin || readEnd > regionEnd) {
+		if (readEnd < a_address || mbi.state != Win32::kMemCommit || a_address < regionBegin || readEnd > regionEnd) {
 			return false;
 		}
 
-		return (mbi.Protect & (PAGE_NOACCESS | PAGE_GUARD)) == 0;
+		return (mbi.protect & (Win32::kPageNoAccess | Win32::kPageGuard)) == 0;
 	}
 
 	[[nodiscard]] inline bool IsWritableAddress(std::uintptr_t a_address, std::size_t a_size)
 	{
-		MEMORY_BASIC_INFORMATION mbi{};
-		if (VirtualQuery(reinterpret_cast<const void*>(a_address), &mbi, sizeof(mbi)) == 0) {
+		Win32::MemoryBasicInformation mbi{};
+		if (Win32::VirtualQuery(reinterpret_cast<const void*>(a_address), &mbi, sizeof(mbi)) == 0) {
 			return false;
 		}
 
-		const auto regionBegin = reinterpret_cast<std::uintptr_t>(mbi.BaseAddress);
-		const auto regionEnd = regionBegin + mbi.RegionSize;
+		const auto regionBegin = reinterpret_cast<std::uintptr_t>(mbi.baseAddress);
+		const auto regionEnd = regionBegin + mbi.regionSize;
 		const auto writeEnd = a_address + a_size;
-		if (writeEnd < a_address || mbi.State != MEM_COMMIT || a_address < regionBegin || writeEnd > regionEnd) {
+		if (writeEnd < a_address || mbi.state != Win32::kMemCommit || a_address < regionBegin || writeEnd > regionEnd) {
 			return false;
 		}
-		if ((mbi.Protect & (PAGE_NOACCESS | PAGE_GUARD)) != 0) {
+		if ((mbi.protect & (Win32::kPageNoAccess | Win32::kPageGuard)) != 0) {
 			return false;
 		}
 
-		const auto protect = mbi.Protect & 0xFF;
-		return protect == PAGE_READWRITE ||
-		       protect == PAGE_WRITECOPY ||
-		       protect == PAGE_EXECUTE_READWRITE ||
-		       protect == PAGE_EXECUTE_WRITECOPY;
+		const auto protect = mbi.protect & 0xFF;
+		return protect == Win32::kPageReadWrite ||
+		       protect == Win32::kPageWriteCopy ||
+		       protect == Win32::kPageExecuteReadWrite ||
+		       protect == Win32::kPageExecuteWriteCopy;
 	}
 
 	template <class T>
