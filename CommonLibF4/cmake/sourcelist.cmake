@@ -257,6 +257,7 @@ set(SOURCES
 	include/RE/Bethesda/bhkCollisionQueryResultHandle.h
 	include/RE/Bethesda/bhkIWorldStepListener.h
 	include/RE/Bethesda/bhkPickData.h
+	include/RE/FO4Runtime.h
 	include/RE/Fallout.h
 	include/RE/Havok/hkAabb.h
 	include/RE/Havok/hkArray.h
