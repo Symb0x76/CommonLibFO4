@@ -225,6 +225,7 @@ set(SOURCES
 	include/RE/Bethesda/Workshop.h
 	include/RE/Bethesda/bhkCharacterController.h
 	include/RE/Bethesda/bhkPickData.h
+	include/RE/FO4Runtime.h
 	include/RE/Fallout.h
 	include/RE/Havok/hkArray.h
 	include/RE/Havok/hkBaseObject.h
