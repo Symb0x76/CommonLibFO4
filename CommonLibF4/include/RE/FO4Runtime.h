@@ -316,6 +316,14 @@ namespace RE::FO4Runtime
 
 		inline constexpr std::uint32_t BS_LIGHTING_SHADER_TYPE = 8;
 		inline constexpr std::uint32_t DF_LIGHTING_SHADER_TYPE = 4;
+		inline constexpr std::uint32_t DF_LIGHT_FULL_SHADOWED_PIXEL_DESCRIPTOR_920 = 0x09200202;
+		inline constexpr std::uint32_t DF_LIGHT_FULL_SHADOWED_PIXEL_DESCRIPTOR_922 = 0x09220202;
+
+		[[nodiscard]] inline constexpr bool IsDFLightFullShadowedPixelDescriptor(std::uint32_t a_descriptor)
+		{
+			return a_descriptor == DF_LIGHT_FULL_SHADOWED_PIXEL_DESCRIPTOR_920 ||
+			       a_descriptor == DF_LIGHT_FULL_SHADOWED_PIXEL_DESCRIPTOR_922;
+		}
 
 		inline constexpr RuntimeField BS_RENDER_PASS_SCENE_LIGHTS{ 0x30 };
 		inline constexpr RuntimeField BS_RENDER_PASS_RAW_LIGHT_COUNT{ 0x50 };
