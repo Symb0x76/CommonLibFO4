@@ -10,7 +10,7 @@
 
 #include "REL/Relocation.h"
 #if defined(FALLOUT_POST_AE)
-#include "REX/FModule.h"
+#	include "REX/FModule.h"
 #endif
 
 struct ID3D11SamplerState;
