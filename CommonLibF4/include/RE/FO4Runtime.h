@@ -348,13 +348,32 @@ namespace RE::FO4Runtime
 
 		inline constexpr std::uint32_t BS_LIGHTING_SHADER_TYPE = 8;
 		inline constexpr std::uint32_t DF_LIGHTING_SHADER_TYPE = 4;
+		inline constexpr std::uint32_t DF_LIGHT_FULL_CONTRACT_PIXEL_DESCRIPTOR_20201 = 0x00020201;
+		inline constexpr std::uint32_t DF_LIGHT_COMPACT_SHADOWED_PIXEL_DESCRIPTOR_200208 = 0x00200208;
+		inline constexpr std::uint32_t DF_LIGHT_COMPACT_SHADOWED_PIXEL_DESCRIPTOR_200220 = 0x00200220;
 		inline constexpr std::uint32_t DF_LIGHT_FULL_SHADOWED_PIXEL_DESCRIPTOR_920 = 0x09200202;
 		inline constexpr std::uint32_t DF_LIGHT_FULL_SHADOWED_PIXEL_DESCRIPTOR_922 = 0x09220202;
+
+		[[nodiscard]] inline constexpr bool IsDFLightFullContractPixelDescriptor(std::uint32_t a_descriptor)
+		{
+			return a_descriptor == DF_LIGHT_FULL_CONTRACT_PIXEL_DESCRIPTOR_20201;
+		}
+
+		[[nodiscard]] inline constexpr bool IsDFLightCompactShadowedPixelDescriptor(std::uint32_t a_descriptor)
+		{
+			return a_descriptor == DF_LIGHT_COMPACT_SHADOWED_PIXEL_DESCRIPTOR_200208 ||
+			       a_descriptor == DF_LIGHT_COMPACT_SHADOWED_PIXEL_DESCRIPTOR_200220;
+		}
 
 		[[nodiscard]] inline constexpr bool IsDFLightFullShadowedPixelDescriptor(std::uint32_t a_descriptor)
 		{
 			return a_descriptor == DF_LIGHT_FULL_SHADOWED_PIXEL_DESCRIPTOR_920 ||
 			       a_descriptor == DF_LIGHT_FULL_SHADOWED_PIXEL_DESCRIPTOR_922;
+		}
+
+		[[nodiscard]] inline constexpr bool IsDFLightLLFConsumerPixelDescriptor(std::uint32_t a_descriptor)
+		{
+			return IsDFLightFullContractPixelDescriptor(a_descriptor);
 		}
 
 		inline constexpr RuntimeField BS_RENDER_PASS_SCENE_LIGHTS{ 0x30 };
