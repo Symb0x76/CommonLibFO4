@@ -333,11 +333,20 @@ namespace RE::FO4Runtime
 
 		inline constexpr std::uint32_t BS_LIGHTING_SHADER_TYPE = 8;
 		inline constexpr std::uint32_t DF_LIGHTING_SHADER_TYPE = 4;
+		inline constexpr std::uint32_t DF_COMPOSITE_SHADER_TYPE = 6;  // TODO(PostNG): verify shader contract before enabling LLF consumer.
 		inline constexpr std::uint32_t DF_LIGHT_FULL_CONTRACT_PIXEL_DESCRIPTOR_20201 = 0x00020201;
 		inline constexpr std::uint32_t DF_LIGHT_COMPACT_SHADOWED_PIXEL_DESCRIPTOR_200208 = 0x00200208;  // TODO(PostNG): verify before enabling LLF consumer.
 		inline constexpr std::uint32_t DF_LIGHT_COMPACT_SHADOWED_PIXEL_DESCRIPTOR_200220 = 0x00200220;  // TODO(PostNG): verify before enabling LLF consumer.
 		inline constexpr std::uint32_t DF_LIGHT_FULL_SHADOWED_PIXEL_DESCRIPTOR_920 = 0x09200202;
 		inline constexpr std::uint32_t DF_LIGHT_FULL_SHADOWED_PIXEL_DESCRIPTOR_922 = 0x09220202;
+		inline constexpr std::uint32_t DF_COMPOSITE_PIXEL_DESCRIPTOR_40 = 0x00000040;  // TODO(PostNG): verify DFComposite descriptors before enabling LLF consumer.
+		inline constexpr std::uint32_t DF_COMPOSITE_PIXEL_DESCRIPTOR_88 = 0x00000088;  // TODO(PostNG): verify DFComposite descriptors before enabling LLF consumer.
+		inline constexpr std::uint32_t DF_COMPOSITE_PIXEL_DESCRIPTOR_268 = 0x00000268;  // TODO(PostNG): verify DFComposite descriptors before enabling LLF consumer.
+		inline constexpr std::uint32_t DF_COMPOSITE_PIXEL_DESCRIPTOR_B20 = 0x00000B20;  // TODO(PostNG): verify DFComposite descriptors before enabling LLF consumer.
+		inline constexpr std::uint32_t DF_COMPOSITE_PIXEL_DESCRIPTOR_B60 = 0x00000B60;  // TODO(PostNG): verify DFComposite descriptors before enabling LLF consumer.
+		inline constexpr std::uint32_t DF_COMPOSITE_PIXEL_DESCRIPTOR_10040 = 0x00010040;  // TODO(PostNG): verify DFComposite descriptors before enabling LLF consumer.
+		inline constexpr std::uint32_t DF_COMPOSITE_PIXEL_DESCRIPTOR_10088 = 0x00010088;  // TODO(PostNG): verify DFComposite descriptors before enabling LLF consumer.
+		inline constexpr std::uint32_t DF_COMPOSITE_PIXEL_DESCRIPTOR_10B20 = 0x00010B20;  // TODO(PostNG): verify DFComposite descriptors before enabling LLF consumer.
 
 		[[nodiscard]] inline constexpr bool IsDFLightFullContractPixelDescriptor(std::uint32_t a_descriptor)
 		{
@@ -361,6 +370,19 @@ namespace RE::FO4Runtime
 			// TODO(PostNG LLF): Keep the full-shadowed proof descriptors out of
 			// the active consumer set until their post-runtime contract is audited.
 			return IsDFLightFullContractPixelDescriptor(a_descriptor);
+		}
+
+		[[nodiscard]] inline constexpr bool IsDFCompositeObservedPixelDescriptor(std::uint32_t a_descriptor)
+		{
+			// TODO(PostNG LLF): Verify these against PostNG runtime dumps before use.
+			return a_descriptor == DF_COMPOSITE_PIXEL_DESCRIPTOR_40 ||
+			       a_descriptor == DF_COMPOSITE_PIXEL_DESCRIPTOR_88 ||
+			       a_descriptor == DF_COMPOSITE_PIXEL_DESCRIPTOR_268 ||
+			       a_descriptor == DF_COMPOSITE_PIXEL_DESCRIPTOR_B20 ||
+			       a_descriptor == DF_COMPOSITE_PIXEL_DESCRIPTOR_B60 ||
+			       a_descriptor == DF_COMPOSITE_PIXEL_DESCRIPTOR_10040 ||
+			       a_descriptor == DF_COMPOSITE_PIXEL_DESCRIPTOR_10088 ||
+			       a_descriptor == DF_COMPOSITE_PIXEL_DESCRIPTOR_10B20;
 		}
 
 		inline constexpr RuntimeField BS_RENDER_PASS_SCENE_LIGHTS{ 0x30 };
