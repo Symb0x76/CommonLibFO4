@@ -642,9 +642,9 @@ namespace RE::FO4Runtime
 		result.vfuncReadable = ReadValue(result.vfuncEntry, result.observedVFunc);
 		result.callPatch = ReadPreNGCallPatch(result.call);
 		result.contextMatches = std::memcmp(
-			reinterpret_cast<const void*>(result.callContext),
-			PreNG::POINT_LIGHT_CALL_CONTEXT.data(),
-			PreNG::POINT_LIGHT_CALL_CONTEXT.size()) == 0;
+									reinterpret_cast<const void*>(result.callContext),
+									PreNG::POINT_LIGHT_CALL_CONTEXT.data(),
+									PreNG::POINT_LIGHT_CALL_CONTEXT.size()) == 0;
 		result.matches =
 			result.observedVFunc == result.setup &&
 			result.callPatch.readable &&
