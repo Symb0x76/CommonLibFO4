@@ -16,7 +16,9 @@ struct ID3D11SamplerState;
 
 namespace RE
 {
+	class BSFadeNode;
 	class BSRenderPass;
+	class BSShaderPropertyLightData;
 	class NiLight;
 	class ShadowSceneNode;
 
@@ -48,6 +50,38 @@ namespace RE::FO4Runtime
 #endif
 
 	inline constexpr std::uintptr_t PRE_NG_STATIC_IMAGE_BASE = 0x140000000ull;
+
+	namespace RenderTargetIndex
+	{
+		inline constexpr std::uint32_t kFrameBuffer = 0;
+		inline constexpr std::uint32_t kMainPreAlpha = 2;
+		inline constexpr std::uint32_t kMain = 3;
+		inline constexpr std::uint32_t kMainTemp = 4;
+		inline constexpr std::uint32_t kGBufferNormal = 20;
+		inline constexpr std::uint32_t kGBufferAlbedo = 22;
+		inline constexpr std::uint32_t kGBufferEmissive = 23;
+		inline constexpr std::uint32_t kGBufferMaterial = 24;
+		inline constexpr std::uint32_t kMotionVectors = 29;
+		inline constexpr std::uint32_t kCount = 101;
+	}
+
+	namespace DepthStencilTargetIndex
+	{
+		inline constexpr std::uint32_t kMain = 2;
+		inline constexpr std::uint32_t kCount = 13;
+	}
+
+	namespace ShaderType
+	{
+		inline constexpr std::int32_t kDFLighting = 4;
+		inline constexpr std::int32_t kDFComposite = 6;
+		inline constexpr std::int32_t kLighting = 8;
+	}
+
+	namespace ShaderDescriptorFlags
+	{
+		inline constexpr std::uint32_t kDeferredLightingPixel = 1u << 4;
+	}
 
 	namespace Win32
 	{
@@ -385,9 +419,14 @@ namespace RE::FO4Runtime
 			       a_descriptor == DF_COMPOSITE_PIXEL_DESCRIPTOR_10B20;
 		}
 
+		inline constexpr RuntimeField BS_RENDER_PASS_SHADER_PROPERTY{ 0x10 };
 		inline constexpr RuntimeField BS_RENDER_PASS_SCENE_LIGHTS{ 0x30 };
 		inline constexpr RuntimeField BS_RENDER_PASS_RAW_LIGHT_COUNT{ 0x50 };
 		inline constexpr std::uint32_t BS_RENDER_PASS_SCENE_LIGHT_FIRST_INDEX = 1;
+
+		inline constexpr RuntimeField BS_SHADER_PROPERTY_FADE_NODE{ 0x48 };
+		inline constexpr RuntimeField BS_FADE_NODE_LIGHT_DATA{ 0x140 };
+		inline constexpr std::uint32_t BS_SHADER_PROPERTY_LIGHT_DATA_SIZE = 0x28;
 
 		inline constexpr RuntimeField BS_LIGHT_WRAPPER_FADE{ 0x10 };
 		inline constexpr RuntimeField BS_LIGHT_WRAPPER_NI_LIGHT{ 0xB8 };
@@ -438,18 +477,32 @@ namespace RE::FO4Runtime
 			inline constexpr RelocationID UPSCALER_RENDER_BACKEND_DEFERRED_PREPASS_CALL{ REL::ID(984743), 0x17F };
 			inline constexpr RelocationID UPSCALER_RENDER_BACKEND_FORWARD_CALL{ REL::ID(984743), 0x1C9 };
 
+			inline constexpr REL::ID DEFERRED_MAIN_RENDER_SHADOW_MAPS{ 620025 };
+			inline constexpr REL::ID DEFERRED_MAIN_RENDER_WORLD_START{ 1108521 };
+			inline constexpr REL::ID DEFERRED_MAIN_RENDER_WORLD_BLENDED_DECALS{ 465756 };
+			inline constexpr REL::ID DEFERRED_RENDERER_RESET_STATE{ 153957 };
+			inline constexpr RelocationID DEFERRED_MAIN_RENDER_SHADOW_MAPS_CALL{ DEFERRED_MAIN_RENDER_SHADOW_MAPS, -50 };
+
+			inline constexpr RuntimeRVAValue DEFERRED_MAIN_RENDER_SHADOW_MAPS_RVA{ 0x2850B1Bull };
+			inline constexpr RuntimeRVAValue DEFERRED_MAIN_RENDER_WORLD_BLENDED_DECALS_RVA{ 0x2851BBCull };
+			inline constexpr RuntimeRVAValue DEFERRED_MAIN_RENDER_WORLD_START_RVA{ 0x28529B0ull };
+			inline constexpr RuntimeRVAValue DEFERRED_RENDERER_RESET_STATE_RVA{ 0x1EB7BA0ull };
+			inline constexpr RuntimeRVAValue DEFERRED_MAIN_RENDER_WORLD_DRIVER_RVA{ 0x2857480ull };
+			inline constexpr RuntimeRVAValue DEFERRED_POST_WORLD_IMAGESPACE_RVA{ 0x2855E60ull };
+			inline constexpr bool DEFERRED_RESTORE_AFTER_MAIN_RENDER_WORLD_START = true;
+
 			inline constexpr std::array<NamedRelocationID, 4> DEFERRED_PIPELINE{
-				NamedRelocationID{ "Main_RenderShadowMaps", REL::ID(620025) },
-				NamedRelocationID{ "Main_RenderWorld_Start", REL::ID(1108521) },
-				NamedRelocationID{ "Main_RenderWorld_BlendedDecals", REL::ID(465756) },
-				NamedRelocationID{ "Renderer_ResetState", REL::ID(153957) }
+				NamedRelocationID{ "Main_RenderShadowMaps", DEFERRED_MAIN_RENDER_SHADOW_MAPS },
+				NamedRelocationID{ "Main_RenderWorld_Start", DEFERRED_MAIN_RENDER_WORLD_START },
+				NamedRelocationID{ "Main_RenderWorld_BlendedDecals", DEFERRED_MAIN_RENDER_WORLD_BLENDED_DECALS },
+				NamedRelocationID{ "Renderer_ResetState", DEFERRED_RENDERER_RESET_STATE }
 			};
 
 			inline constexpr std::array<NamedRuntimeRVA, 4> DEFERRED_SCAN_TARGETS{
-				NamedRuntimeRVA{ "ShadowMaps", RuntimeRVAValue{ 0x2850B1Bull } },
-				NamedRuntimeRVA{ "BlendedDecals", RuntimeRVAValue{ 0x2851BBCull } },
-				NamedRuntimeRVA{ "World_Start", RuntimeRVAValue{ 0x28529B0ull } },
-				NamedRuntimeRVA{ "ResetState", RuntimeRVAValue{ 0x1EB7BA0ull } }
+				NamedRuntimeRVA{ "ShadowMaps", DEFERRED_MAIN_RENDER_SHADOW_MAPS_RVA },
+				NamedRuntimeRVA{ "BlendedDecals", DEFERRED_MAIN_RENDER_WORLD_BLENDED_DECALS_RVA },
+				NamedRuntimeRVA{ "World_Start", DEFERRED_MAIN_RENDER_WORLD_START_RVA },
+				NamedRuntimeRVA{ "ResetState", DEFERRED_RENDERER_RESET_STATE_RVA }
 			};
 		}
 	}
@@ -500,6 +553,100 @@ namespace RE::FO4Runtime
 		bool entryReadable = false;
 	};
 
+	struct PreNGCallPatchState
+	{
+		bool readable = false;
+		std::uint8_t opcode = 0;
+		std::int32_t rel32 = 0;
+		std::uintptr_t callTarget = 0;
+	};
+
+	struct PreNGPointLightCallsiteValidation
+	{
+		std::uintptr_t imageBase = 0;
+		std::uintptr_t setup = 0;
+		std::uintptr_t call = 0;
+		std::uintptr_t callContext = 0;
+		std::uintptr_t target = 0;
+		std::uintptr_t vtable = 0;
+		std::uintptr_t vfuncEntry = 0;
+		std::uintptr_t observedVFunc = 0;
+		PreNGCallPatchState callPatch;
+		bool vfuncReadable = false;
+		bool callContextReadable = false;
+		bool contextMatches = false;
+		bool matches = false;
+	};
+
+	[[nodiscard]] inline PreNGCallPatchState ReadPreNGCallPatch(std::uintptr_t a_call)
+	{
+		PreNGCallPatchState state{};
+		if (!IsReadableAddress(a_call, 5)) {
+			return state;
+		}
+
+		const auto* bytes = reinterpret_cast<const std::uint8_t*>(a_call);
+		state.readable = true;
+		state.opcode = bytes[0];
+		std::memcpy(&state.rel32, bytes + 1, sizeof(state.rel32));
+		state.callTarget = static_cast<std::uintptr_t>(
+			static_cast<std::intptr_t>(a_call + 5) + state.rel32);
+		return state;
+	}
+
+	[[nodiscard]] inline std::uintptr_t ResolvePreNGAbsoluteJumpTarget(std::uintptr_t a_address)
+	{
+		std::uint8_t bytes[14]{};
+		if (!IsReadableAddress(a_address, sizeof(bytes))) {
+			return 0;
+		}
+
+		std::memcpy(bytes, reinterpret_cast<const void*>(a_address), sizeof(bytes));
+		if (bytes[0] != 0xFF || bytes[1] != 0x25) {
+			return 0;
+		}
+
+		std::int32_t disp = 0;
+		std::memcpy(&disp, bytes + 2, sizeof(disp));
+		const auto slot = static_cast<std::uintptr_t>(
+			static_cast<std::intptr_t>(a_address + 6) + disp);
+
+		std::uintptr_t target = 0;
+		return ReadValue(slot, target) ? target : 0;
+	}
+
+	[[nodiscard]] inline PreNGPointLightCallsiteValidation ValidatePreNGPointLightCallsite()
+	{
+		PreNGPointLightCallsiteValidation result{};
+		result.imageBase = ModuleBase();
+		result.setup = PreNG::BS_LIGHTING_SHADER_SETUP_GEOMETRY.address();
+		result.call = PreNG::POINT_LIGHT_CALL.address();
+		result.callContext = result.call - 8;
+		result.target = PreNG::POINT_LIGHT_TARGET.address();
+		result.vtable = PreNG::BS_LIGHTING_SHADER_VTABLE.address();
+		result.vfuncEntry = PreNG::BS_LIGHTING_SHADER_VFUNC_7.address();
+
+		result.vfuncReadable = IsReadableAddress(result.vfuncEntry, sizeof(std::uintptr_t));
+		result.callContextReadable = IsReadableAddress(result.callContext, PreNG::POINT_LIGHT_CALL_CONTEXT.size());
+		if (!result.vfuncReadable || !result.callContextReadable) {
+			return result;
+		}
+
+		result.vfuncReadable = ReadValue(result.vfuncEntry, result.observedVFunc);
+		result.callPatch = ReadPreNGCallPatch(result.call);
+		result.contextMatches = std::memcmp(
+			reinterpret_cast<const void*>(result.callContext),
+			PreNG::POINT_LIGHT_CALL_CONTEXT.data(),
+			PreNG::POINT_LIGHT_CALL_CONTEXT.size()) == 0;
+		result.matches =
+			result.observedVFunc == result.setup &&
+			result.callPatch.readable &&
+			result.callPatch.opcode == 0xE8 &&
+			result.callPatch.callTarget == result.target &&
+			result.contextMatches;
+		return result;
+	}
+
 	[[nodiscard]] inline std::uintptr_t ReadPreNGShaderEntryD3DObject(std::uintptr_t a_entry)
 	{
 		if (a_entry == 0) {
@@ -535,6 +682,11 @@ namespace RE::FO4Runtime
 			address(reinterpret_cast<std::uintptr_t>(a_pass))
 		{}
 
+		[[nodiscard]] bool ReadShaderProperty(std::uintptr_t& a_shaderProperty) const
+		{
+			return PreNG::BS_RENDER_PASS_SHADER_PROPERTY.read(address, a_shaderProperty);
+		}
+
 		[[nodiscard]] bool ReadSceneLights(std::uintptr_t& a_sceneLights) const
 		{
 			return PreNG::BS_RENDER_PASS_SCENE_LIGHTS.read(address, a_sceneLights);
@@ -554,6 +706,31 @@ namespace RE::FO4Runtime
 
 			const auto physicalIndex = a_logicalIndex + PreNG::BS_RENDER_PASS_SCENE_LIGHT_FIRST_INDEX;
 			return ReadValue(sceneLights + (physicalIndex * sizeof(std::uintptr_t)), a_wrapper);
+		}
+
+		[[nodiscard]] bool ReadFadeNode(std::uintptr_t& a_fadeNode) const
+		{
+			std::uintptr_t shaderProperty = 0;
+			if (!ReadShaderProperty(shaderProperty) || shaderProperty == 0) {
+				return false;
+			}
+
+			return PreNG::BS_SHADER_PROPERTY_FADE_NODE.read(shaderProperty, a_fadeNode);
+		}
+
+		[[nodiscard]] BSShaderPropertyLightData* GetShaderPropertyLightData() const
+		{
+			std::uintptr_t fadeNode = 0;
+			if (!ReadFadeNode(fadeNode) || fadeNode == 0) {
+				return nullptr;
+			}
+
+			const auto lightDataAddress = PreNG::BS_FADE_NODE_LIGHT_DATA.address(fadeNode);
+			if (!IsReadableAddress(lightDataAddress, PreNG::BS_SHADER_PROPERTY_LIGHT_DATA_SIZE)) {
+				return nullptr;
+			}
+
+			return reinterpret_cast<BSShaderPropertyLightData*>(lightDataAddress);
 		}
 	};
 
@@ -615,6 +792,16 @@ namespace RE::FO4Runtime
 	{
 		std::uintptr_t entries = 0;
 		std::uint32_t count = 0;
+
+		[[nodiscard]] bool ReadLightWrapper(std::uint32_t a_index, std::uintptr_t& a_wrapper) const
+		{
+			if (entries == 0 || a_index >= count) {
+				return false;
+			}
+
+			const auto entryAddress = entries + (static_cast<std::uintptr_t>(a_index) * sizeof(std::uintptr_t));
+			return ReadValue(entryAddress, a_wrapper);
+		}
 	};
 
 	struct PreNGShadowSceneBuckets
