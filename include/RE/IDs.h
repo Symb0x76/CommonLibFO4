@@ -1472,7 +1472,11 @@ namespace RE::ID
 
 	namespace MenuControls
 	{
+		inline constexpr REL::ID ForcePauseGame{ 2249384 };
+		inline constexpr REL::ID ForceResumeGame{ 2249385 };
+		inline constexpr REL::ID RegisterHandler{ 2249387 };
 		inline constexpr REL::ID Singleton{ 4796375 };
+		inline constexpr REL::ID UnregisterHandler{ 2249388 };
 	}
 
 	namespace MenuCursor
