@@ -84,6 +84,21 @@ namespace RE::FO4Runtime
 		inline constexpr std::uint32_t kDeferredLightingPixel = 1u << 4;
 	}
 
+	[[nodiscard]] inline constexpr bool IsLightingShaderType(std::int32_t a_shaderType) noexcept
+	{
+		return a_shaderType == ShaderType::kLighting;
+	}
+
+	[[nodiscard]] inline constexpr bool IsDeferredLightingPixelDescriptor(std::uint32_t a_descriptor) noexcept
+	{
+		return (a_descriptor & ShaderDescriptorFlags::kDeferredLightingPixel) != 0;
+	}
+
+	[[nodiscard]] inline constexpr std::uint32_t AddDeferredLightingPixelDescriptor(std::uint32_t a_descriptor) noexcept
+	{
+		return a_descriptor | ShaderDescriptorFlags::kDeferredLightingPixel;
+	}
+
 	namespace Win32
 	{
 		struct MemoryBasicInformation
@@ -383,6 +398,11 @@ namespace RE::FO4Runtime
 		inline constexpr std::uint32_t BS_LIGHTING_SHADER_TYPE = 8;
 		inline constexpr std::uint32_t DF_LIGHTING_SHADER_TYPE = 4;
 		inline constexpr std::uint32_t DF_COMPOSITE_SHADER_TYPE = 6;
+		inline constexpr std::uint32_t BS_LIGHTING_PIXEL_DESCRIPTOR_1 = 0x00000001;
+		inline constexpr std::uint32_t BS_LIGHTING_PIXEL_DESCRIPTOR_101 = 0x00000101;
+		inline constexpr std::uint32_t BS_LIGHTING_PIXEL_DESCRIPTOR_111 = 0x00000111;
+		inline constexpr std::uint32_t BS_LIGHTING_PIXEL_DESCRIPTOR_141 = 0x00000141;
+		inline constexpr std::uint32_t BS_LIGHTING_PIXEL_DESCRIPTOR_201 = 0x00000201;
 		inline constexpr std::uint32_t DF_LIGHT_FULL_CONTRACT_PIXEL_DESCRIPTOR_20201 = 0x00020201;
 		inline constexpr std::uint32_t DF_LIGHT_COMPACT_SHADOWED_PIXEL_DESCRIPTOR_200208 = 0x00200208;
 		inline constexpr std::uint32_t DF_LIGHT_COMPACT_SHADOWED_PIXEL_DESCRIPTOR_200220 = 0x00200220;
@@ -396,6 +416,15 @@ namespace RE::FO4Runtime
 		inline constexpr std::uint32_t DF_COMPOSITE_PIXEL_DESCRIPTOR_10040 = 0x00010040;
 		inline constexpr std::uint32_t DF_COMPOSITE_PIXEL_DESCRIPTOR_10088 = 0x00010088;
 		inline constexpr std::uint32_t DF_COMPOSITE_PIXEL_DESCRIPTOR_10B20 = 0x00010B20;
+
+		[[nodiscard]] inline constexpr bool IsBSLightingContractPixelDescriptor(std::uint32_t a_descriptor)
+		{
+			return a_descriptor == BS_LIGHTING_PIXEL_DESCRIPTOR_1 ||
+			       a_descriptor == BS_LIGHTING_PIXEL_DESCRIPTOR_101 ||
+			       a_descriptor == BS_LIGHTING_PIXEL_DESCRIPTOR_111 ||
+			       a_descriptor == BS_LIGHTING_PIXEL_DESCRIPTOR_141 ||
+			       a_descriptor == BS_LIGHTING_PIXEL_DESCRIPTOR_201;
+		}
 
 		[[nodiscard]] inline constexpr bool IsDFLightFullContractPixelDescriptor(std::uint32_t a_descriptor)
 		{
