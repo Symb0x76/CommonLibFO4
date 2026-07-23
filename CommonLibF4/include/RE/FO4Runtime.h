@@ -565,14 +565,14 @@ namespace RE::FO4Runtime
 			inline constexpr REL::ID DEFERRED_MAIN_RENDER_SHADOW_MAPS{ 2318298 };
 			inline constexpr REL::ID DEFERRED_MAIN_RENDER_WORLD_START{ 2318312 };
 			inline constexpr REL::ID DEFERRED_MAIN_RENDER_WORLD_BLENDED_DECALS{ 2318306 };
-			inline constexpr REL::ID DEFERRED_RENDERER_RESET_STATE{ 2276833 };
+			inline constexpr REL::ID DEFERRED_RENDERER_BEGIN{ 2276833 };
 
 			inline constexpr std::array<NamedRelocationID, 5> DEFERRED_PIPELINE{
 				NamedRelocationID{ "Main_RenderWorld", DEFERRED_MAIN_RENDER_WORLD },
 				NamedRelocationID{ "Main_RenderShadowMaps", DEFERRED_MAIN_RENDER_SHADOW_MAPS },
 				NamedRelocationID{ "Main_RenderWorld_Start", DEFERRED_MAIN_RENDER_WORLD_START },
 				NamedRelocationID{ "Main_RenderWorld_BlendedDecals", DEFERRED_MAIN_RENDER_WORLD_BLENDED_DECALS },
-				NamedRelocationID{ "Renderer_ResetState", DEFERRED_RENDERER_RESET_STATE }
+				NamedRelocationID{ "Renderer_Begin", DEFERRED_RENDERER_BEGIN }
 			};
 		}
 	}
