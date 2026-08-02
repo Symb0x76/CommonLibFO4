@@ -6,10 +6,10 @@
 #include <cstring>
 #include <type_traits>
 
-#include "REX/W32/KERNEL32.h"
 #include "REL/Relocation.h"
+#include "REX/W32/KERNEL32.h"
 #if defined(FALLOUT_POST_AE)
-#include "REX/FModule.h"
+#	include "REX/FModule.h"
 #endif
 
 struct ID3D11SamplerState;
@@ -111,9 +111,9 @@ namespace RE::FO4Runtime
 		inline constexpr std::uint32_t kPageExecuteWriteCopy = 0x00000080u;
 
 		[[nodiscard]] inline std::size_t VirtualQuery(
-			const void* a_address,
+			const void*             a_address,
 			MemoryBasicInformation* a_buffer,
-			std::size_t a_length) noexcept
+			std::size_t             a_length) noexcept
 		{
 			return REX::W32::VirtualQuery(a_address, a_buffer, a_length);
 		}
@@ -246,7 +246,7 @@ namespace RE::FO4Runtime
 
 	struct RelocationID
 	{
-		REL::ID id;
+		REL::ID        id;
 		std::ptrdiff_t offset = 0;
 
 		[[nodiscard]] std::uintptr_t address() const
@@ -258,12 +258,12 @@ namespace RE::FO4Runtime
 	struct NamedRelocationID
 	{
 		const char* name;
-		REL::ID id;
+		REL::ID     id;
 	};
 
 	struct NamedRuntimeRVA
 	{
-		const char* name;
+		const char*     name;
 		RuntimeRVAValue location;
 	};
 
@@ -393,11 +393,11 @@ namespace RE::FO4Runtime
 		inline constexpr std::uint32_t DF_LIGHT_COMPACT_SHADOWED_PIXEL_DESCRIPTOR_200220 = 0x00200220;  // TODO(PostAE): verify before enabling LLF consumer.
 		inline constexpr std::uint32_t DF_LIGHT_FULL_SHADOWED_PIXEL_DESCRIPTOR_920 = 0x09200202;
 		inline constexpr std::uint32_t DF_LIGHT_FULL_SHADOWED_PIXEL_DESCRIPTOR_922 = 0x09220202;
-		inline constexpr std::uint32_t DF_COMPOSITE_PIXEL_DESCRIPTOR_40 = 0x00000040;  // TODO(PostAE): verify DFComposite descriptors before enabling LLF consumer.
-		inline constexpr std::uint32_t DF_COMPOSITE_PIXEL_DESCRIPTOR_88 = 0x00000088;  // TODO(PostAE): verify DFComposite descriptors before enabling LLF consumer.
-		inline constexpr std::uint32_t DF_COMPOSITE_PIXEL_DESCRIPTOR_268 = 0x00000268;  // TODO(PostAE): verify DFComposite descriptors before enabling LLF consumer.
-		inline constexpr std::uint32_t DF_COMPOSITE_PIXEL_DESCRIPTOR_B20 = 0x00000B20;  // TODO(PostAE): verify DFComposite descriptors before enabling LLF consumer.
-		inline constexpr std::uint32_t DF_COMPOSITE_PIXEL_DESCRIPTOR_B60 = 0x00000B60;  // TODO(PostAE): verify DFComposite descriptors before enabling LLF consumer.
+		inline constexpr std::uint32_t DF_COMPOSITE_PIXEL_DESCRIPTOR_40 = 0x00000040;     // TODO(PostAE): verify DFComposite descriptors before enabling LLF consumer.
+		inline constexpr std::uint32_t DF_COMPOSITE_PIXEL_DESCRIPTOR_88 = 0x00000088;     // TODO(PostAE): verify DFComposite descriptors before enabling LLF consumer.
+		inline constexpr std::uint32_t DF_COMPOSITE_PIXEL_DESCRIPTOR_268 = 0x00000268;    // TODO(PostAE): verify DFComposite descriptors before enabling LLF consumer.
+		inline constexpr std::uint32_t DF_COMPOSITE_PIXEL_DESCRIPTOR_B20 = 0x00000B20;    // TODO(PostAE): verify DFComposite descriptors before enabling LLF consumer.
+		inline constexpr std::uint32_t DF_COMPOSITE_PIXEL_DESCRIPTOR_B60 = 0x00000B60;    // TODO(PostAE): verify DFComposite descriptors before enabling LLF consumer.
 		inline constexpr std::uint32_t DF_COMPOSITE_PIXEL_DESCRIPTOR_10040 = 0x00010040;  // TODO(PostAE): verify DFComposite descriptors before enabling LLF consumer.
 		inline constexpr std::uint32_t DF_COMPOSITE_PIXEL_DESCRIPTOR_10088 = 0x00010088;  // TODO(PostAE): verify DFComposite descriptors before enabling LLF consumer.
 		inline constexpr std::uint32_t DF_COMPOSITE_PIXEL_DESCRIPTOR_10B20 = 0x00010B20;  // TODO(PostAE): verify DFComposite descriptors before enabling LLF consumer.
@@ -448,18 +448,18 @@ namespace RE::FO4Runtime
 			       a_descriptor == DF_COMPOSITE_PIXEL_DESCRIPTOR_10B20;
 		}
 
-		inline constexpr RuntimeField BS_RENDER_PASS_SHADER_PROPERTY{ 0x10 };
-		inline constexpr RuntimeField BS_RENDER_PASS_SCENE_LIGHTS{ 0x30 };
-		inline constexpr RuntimeField BS_RENDER_PASS_RAW_LIGHT_COUNT{ 0x50 };
+		inline constexpr RuntimeField  BS_RENDER_PASS_SHADER_PROPERTY{ 0x10 };
+		inline constexpr RuntimeField  BS_RENDER_PASS_SCENE_LIGHTS{ 0x30 };
+		inline constexpr RuntimeField  BS_RENDER_PASS_RAW_LIGHT_COUNT{ 0x50 };
 		inline constexpr std::uint32_t BS_RENDER_PASS_SCENE_LIGHT_FIRST_INDEX = 1;
 
-		inline constexpr RuntimeField BS_SHADER_PROPERTY_FADE_NODE{ 0x48 };
-		inline constexpr RuntimeField BS_FADE_NODE_LIGHT_DATA{ 0x140 };
+		inline constexpr RuntimeField  BS_SHADER_PROPERTY_FADE_NODE{ 0x48 };
+		inline constexpr RuntimeField  BS_FADE_NODE_LIGHT_DATA{ 0x140 };
 		inline constexpr std::uint32_t BS_SHADER_PROPERTY_LIGHT_DATA_SIZE = 0x28;
 
-		inline constexpr RuntimeField BS_LIGHT_WRAPPER_FADE{ 0x10 };
-		inline constexpr RuntimeField BS_LIGHT_WRAPPER_NI_LIGHT{ 0xB8 };
-		inline constexpr RuntimeField BS_SHADOW_LIGHT_MASK_INDEX{ 0x1B0 };
+		inline constexpr RuntimeField  BS_LIGHT_WRAPPER_FADE{ 0x10 };
+		inline constexpr RuntimeField  BS_LIGHT_WRAPPER_NI_LIGHT{ 0xB8 };
+		inline constexpr RuntimeField  BS_SHADOW_LIGHT_MASK_INDEX{ 0x1B0 };
 		inline constexpr std::uint32_t INVALID_SHADOW_LIGHT_MASK_INDEX = 255;
 		inline constexpr std::uint32_t MAX_SHADOW_LIGHT_MASK_BITS = 32;
 
@@ -469,12 +469,12 @@ namespace RE::FO4Runtime
 		inline constexpr RuntimeField NI_LIGHT_DIMMER{ 0x144 };
 
 		inline constexpr std::uint32_t SHADOW_SCENE_NODE_ARRAY_SLOTS = 21;
-		inline constexpr RuntimeField SHADOW_SCENE_NODE_ACTIVE_LIGHTS{ 0x158 };
-		inline constexpr RuntimeField SHADOW_SCENE_NODE_ACTIVE_LIGHTS_COUNT{ 0x168 };
-		inline constexpr RuntimeField SHADOW_SCENE_NODE_ACTIVE_SHADOW_LIGHTS{ 0x170 };
-		inline constexpr RuntimeField SHADOW_SCENE_NODE_ACTIVE_SHADOW_LIGHTS_COUNT{ 0x180 };
-		inline constexpr RuntimeField SHADOW_SCENE_NODE_ACTIVE_EXTRA_LIGHTS{ 0x188 };
-		inline constexpr RuntimeField SHADOW_SCENE_NODE_ACTIVE_EXTRA_LIGHTS_COUNT{ 0x198 };
+		inline constexpr RuntimeField  SHADOW_SCENE_NODE_ACTIVE_LIGHTS{ 0x158 };
+		inline constexpr RuntimeField  SHADOW_SCENE_NODE_ACTIVE_LIGHTS_COUNT{ 0x168 };
+		inline constexpr RuntimeField  SHADOW_SCENE_NODE_ACTIVE_SHADOW_LIGHTS{ 0x170 };
+		inline constexpr RuntimeField  SHADOW_SCENE_NODE_ACTIVE_SHADOW_LIGHTS_COUNT{ 0x180 };
+		inline constexpr RuntimeField  SHADOW_SCENE_NODE_ACTIVE_EXTRA_LIGHTS{ 0x188 };
+		inline constexpr RuntimeField  SHADOW_SCENE_NODE_ACTIVE_EXTRA_LIGHTS_COUNT{ 0x198 };
 
 		inline constexpr RuntimeField SHADER_ENTRY_D3D_OBJECT{ 0x8 };
 		inline constexpr RuntimeField PIXEL_SHADER_SLOT_88{ 88 };
@@ -497,19 +497,19 @@ namespace RE::FO4Runtime
 
 		namespace Hooks
 		{
-			inline constexpr REL::ID UPSCALER_WINDOW_SIZE_CHANGED{ 212827 };
+			inline constexpr REL::ID      UPSCALER_WINDOW_SIZE_CHANGED{ 212827 };
 			inline constexpr RelocationID UPSCALER_SET_DEFAULT_VIEWPORT_CALL{ REL::ID(587723), 0xE1 };
-			inline constexpr REL::ID UPSCALER_DRAW_WORLD_FORWARD{ 656535 };
+			inline constexpr REL::ID      UPSCALER_DRAW_WORLD_FORWARD{ 656535 };
 			inline constexpr RelocationID UPSCALER_DRAW_WORLD_RETICLE_CALL{ REL::ID(338205), 0x253 };
 
 			inline constexpr RelocationID UPSCALER_RENDER_BACKEND_DYNAMIC_RESOLUTION_CALL{ REL::ID(984743), 0x14B };
 			inline constexpr RelocationID UPSCALER_RENDER_BACKEND_DEFERRED_PREPASS_CALL{ REL::ID(984743), 0x17F };
 			inline constexpr RelocationID UPSCALER_RENDER_BACKEND_FORWARD_CALL{ REL::ID(984743), 0x1C9 };
 
-			inline constexpr REL::ID DEFERRED_MAIN_RENDER_SHADOW_MAPS{ 620025 };
-			inline constexpr REL::ID DEFERRED_MAIN_RENDER_WORLD_START{ 1108521 };
-			inline constexpr REL::ID DEFERRED_MAIN_RENDER_WORLD_BLENDED_DECALS{ 465756 };
-			inline constexpr REL::ID DEFERRED_RENDERER_RESET_STATE{ 153957 };
+			inline constexpr REL::ID      DEFERRED_MAIN_RENDER_SHADOW_MAPS{ 620025 };
+			inline constexpr REL::ID      DEFERRED_MAIN_RENDER_WORLD_START{ 1108521 };
+			inline constexpr REL::ID      DEFERRED_MAIN_RENDER_WORLD_BLENDED_DECALS{ 465756 };
+			inline constexpr REL::ID      DEFERRED_RENDERER_RESET_STATE{ 153957 };
 			inline constexpr RelocationID DEFERRED_MAIN_RENDER_SHADOW_MAPS_CALL{ DEFERRED_MAIN_RENDER_SHADOW_MAPS, -50 };
 
 			inline constexpr RuntimeRVAValue DEFERRED_MAIN_RENDER_SHADOW_MAPS_RVA{ 0x2850B1Bull };
@@ -518,7 +518,7 @@ namespace RE::FO4Runtime
 			inline constexpr RuntimeRVAValue DEFERRED_RENDERER_RESET_STATE_RVA{ 0x1EB7BA0ull };
 			inline constexpr RuntimeRVAValue DEFERRED_MAIN_RENDER_WORLD_DRIVER_RVA{ 0x2857480ull };
 			inline constexpr RuntimeRVAValue DEFERRED_POST_WORLD_IMAGESPACE_RVA{ 0x2855E60ull };
-			inline constexpr bool DEFERRED_RESTORE_AFTER_MAIN_RENDER_WORLD_START = true;
+			inline constexpr bool            DEFERRED_RESTORE_AFTER_MAIN_RENDER_WORLD_START = true;
 
 			inline constexpr std::array<NamedRelocationID, 4> DEFERRED_PIPELINE{
 				NamedRelocationID{ "Main_RenderShadowMaps", DEFERRED_MAIN_RENDER_SHADOW_MAPS },
@@ -545,9 +545,9 @@ namespace RE::FO4Runtime
 		// The entries below only cover hooks already consumed by FO4CS.
 		namespace Hooks
 		{
-			inline constexpr REL::ID UPSCALER_WINDOW_SIZE_CHANGED{ 2276824 };
+			inline constexpr REL::ID      UPSCALER_WINDOW_SIZE_CHANGED{ 2276824 };
 			inline constexpr RelocationID UPSCALER_SET_DEFAULT_VIEWPORT_CALL{ REL::ID(2318322), 0xC5 };
-			inline constexpr REL::ID UPSCALER_DRAW_WORLD_FORWARD{ 2318315 };
+			inline constexpr REL::ID      UPSCALER_DRAW_WORLD_FORWARD{ 2318315 };
 			inline constexpr RelocationID UPSCALER_DRAW_WORLD_RETICLE_CALL{ REL::ID(2318315), 0x53D };
 
 			inline constexpr RelocationID UPSCALER_RENDER_BACKEND_DYNAMIC_RESOLUTION_CALL{ REL::ID(2318321), 0x29F };
@@ -574,37 +574,37 @@ namespace RE::FO4Runtime
 	{
 		std::uintptr_t entry = 0;
 		std::uintptr_t d3dObject = 0;
-		std::uint32_t id = 0;
-		std::uint8_t slot88 = 0xFF;
-		std::uint8_t slot89 = 0xFF;
-		std::uint8_t slot94 = 0xFF;
-		std::uint8_t slot96 = 0xFF;
-		bool entryReadable = false;
+		std::uint32_t  id = 0;
+		std::uint8_t   slot88 = 0xFF;
+		std::uint8_t   slot89 = 0xFF;
+		std::uint8_t   slot94 = 0xFF;
+		std::uint8_t   slot96 = 0xFF;
+		bool           entryReadable = false;
 	};
 
 	struct PreNGCallPatchState
 	{
-		bool readable = false;
-		std::uint8_t opcode = 0;
-		std::int32_t rel32 = 0;
+		bool           readable = false;
+		std::uint8_t   opcode = 0;
+		std::int32_t   rel32 = 0;
 		std::uintptr_t callTarget = 0;
 	};
 
 	struct PreNGPointLightCallsiteValidation
 	{
-		std::uintptr_t imageBase = 0;
-		std::uintptr_t setup = 0;
-		std::uintptr_t call = 0;
-		std::uintptr_t callContext = 0;
-		std::uintptr_t target = 0;
-		std::uintptr_t vtable = 0;
-		std::uintptr_t vfuncEntry = 0;
-		std::uintptr_t observedVFunc = 0;
+		std::uintptr_t      imageBase = 0;
+		std::uintptr_t      setup = 0;
+		std::uintptr_t      call = 0;
+		std::uintptr_t      callContext = 0;
+		std::uintptr_t      target = 0;
+		std::uintptr_t      vtable = 0;
+		std::uintptr_t      vfuncEntry = 0;
+		std::uintptr_t      observedVFunc = 0;
 		PreNGCallPatchState callPatch;
-		bool vfuncReadable = false;
-		bool callContextReadable = false;
-		bool contextMatches = false;
-		bool matches = false;
+		bool                vfuncReadable = false;
+		bool                callContextReadable = false;
+		bool                contextMatches = false;
+		bool                matches = false;
 	};
 
 	[[nodiscard]] inline PreNGCallPatchState ReadPreNGCallPatch(std::uintptr_t a_call)
@@ -664,9 +664,9 @@ namespace RE::FO4Runtime
 		result.vfuncReadable = ReadValue(result.vfuncEntry, result.observedVFunc);
 		result.callPatch = ReadPreNGCallPatch(result.call);
 		result.contextMatches = std::memcmp(
-			reinterpret_cast<const void*>(result.callContext),
-			PreNG::POINT_LIGHT_CALL_CONTEXT.data(),
-			PreNG::POINT_LIGHT_CALL_CONTEXT.size()) == 0;
+									reinterpret_cast<const void*>(result.callContext),
+									PreNG::POINT_LIGHT_CALL_CONTEXT.data(),
+									PreNG::POINT_LIGHT_CALL_CONTEXT.size()) == 0;
 		result.matches =
 			result.observedVFunc == result.setup &&
 			result.callPatch.readable &&
@@ -811,16 +811,16 @@ namespace RE::FO4Runtime
 	struct PreNGShadowSceneNodeRef
 	{
 		std::uintptr_t node = 0;
-		std::uint8_t selectedIndex = 0;
-		std::uint8_t currentIndex = 0;
-		bool currentIndexRead = false;
-		bool usedFallback = false;
+		std::uint8_t   selectedIndex = 0;
+		std::uint8_t   currentIndex = 0;
+		bool           currentIndexRead = false;
+		bool           usedFallback = false;
 	};
 
 	struct PreNGShadowSceneBucket
 	{
 		std::uintptr_t entries = 0;
-		std::uint32_t count = 0;
+		std::uint32_t  count = 0;
 
 		[[nodiscard]] bool ReadLightWrapper(std::uint32_t a_index, std::uintptr_t& a_wrapper) const
 		{
@@ -843,7 +843,7 @@ namespace RE::FO4Runtime
 	[[nodiscard]] inline PreNGShadowSceneNodeRef GetPreNGWorldShadowSceneNode()
 	{
 		PreNGShadowSceneNodeRef result{};
-		const auto arrayBase = PreNG::SHADOW_SCENE_NODE_ARRAY.address();
+		const auto              arrayBase = PreNG::SHADOW_SCENE_NODE_ARRAY.address();
 		if (arrayBase == 0) {
 			return result;
 		}
@@ -852,7 +852,7 @@ namespace RE::FO4Runtime
 			result.currentIndexRead = true;
 			if (result.currentIndex < PreNG::SHADOW_SCENE_NODE_ARRAY_SLOTS) {
 				std::uintptr_t indexedNode = 0;
-				const auto indexedSlot = arrayBase + (static_cast<std::uintptr_t>(result.currentIndex) * sizeof(std::uintptr_t));
+				const auto     indexedSlot = arrayBase + (static_cast<std::uintptr_t>(result.currentIndex) * sizeof(std::uintptr_t));
 				if (ReadValue(indexedSlot, indexedNode) && indexedNode != 0) {
 					result.node = indexedNode;
 					result.selectedIndex = result.currentIndex;

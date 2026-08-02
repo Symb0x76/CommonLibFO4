@@ -702,6 +702,7 @@
 #include "RE/F/FleePackage.h"
 #include "RE/F/FreeCameraState.h"
 #include "RE/F/FriendshipFactionsStruct.h"
+#include "RE/FO4Runtime.h"
 #include "RE/G/GROUP_REACTION.h"
 #include "RE/G/GUN_STATE.h"
 #include "RE/G/GameColorData.h"
